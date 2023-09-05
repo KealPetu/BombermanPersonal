@@ -1,0 +1,174 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package "frontEnd" {
+    class BombermanJuego{
+
+        + comprobarEstadoDelJuego()
+        + construirNivel() : Nivel nivel
+        + cargarEstadoInicial()
+        + cargarMenu()
+        + cargarNivel()
+    }
+
+    enum EstadoDelJuego {
+
+        PRESENTACIÓN,
+        MENU,
+        GAME_PLAY,
+        PAUSA,
+        GAME_OVER,
+        NIVEL_SUPERADO,
+        TRANSICIÓN_DE_NIVELES,
+        SELECCIÓN_DE_NIVEL
+    }
+
+    class Nivel {
+
+        - mapa : int[][][]
+        - nivelActual : int
+        - coordenadaX : int
+        - coordenadaY : int
+    }
+
+    abstract class Entidad {
+
+        - mapaActual : int
+        - posicionInicalX : int
+        - posicionInicialY : int
+        - identificador : int
+    }
+
+    abstract class Personaje {
+
+        - puntaje : int
+        - vidaActual : int
+        - máximoDeVidas : int
+        - velocidad : int
+        - recibióDaño : boolean
+        - estaVivo : boolean
+    }
+
+    class Jugador {
+
+        - controlaExplosionDeBomba : boolean
+        - tiempoDeInvencibilidad : int
+        - completóElNivel : boolean
+        + colocarBomba()
+        + hablarConPNJAmigable()
+        + verificarControlDeExplosion()
+        + explotarBomba()
+    }
+
+    interface Moviente {
+        - seMueveArriba : boolean
+        - seMueveAbajo : boolean
+        - seMueveIzquierda : boolean
+        - seMueveDerecha : boolean
+        - quieto : boolean
+
+        + moverArriba()
+        + moverAbajo()
+        + moverIzquierda()
+        + moverDerecha()
+        + mantenerseQuieto()
+    }
+    interface Recolectable {
+
+        - esRecolectable : boolean
+    }
+
+    interface Colisionable {
+
+        - colisionóConDañino : boolean
+        - colisionóConDetenible : boolean
+        + colisionaConEntidad(Entidad entidad)
+    }
+
+    interface Amigable {
+
+        - esAmigable : boolean
+        - diálogoActual: int
+        - diálogos : String[]
+        + mostrarDialogo() : String diálogo
+    }
+
+    interface Dañino {
+
+        - esDañino : boolean
+        + dañarEntidad (Entidad entidad)
+    }
+
+    interface Detenible {
+
+        - esDetenible : boolean
+    }
+
+    interface KeyListener
+
+
+    class Balloon
+    class Blaster
+
+    class Bomba {
+
+        - tiempoDeExplosion : int
+        + explotar()
+    }
+
+    class Llamas {
+
+        - alcance: int
+        + destruirEntidad()
+    }
+
+    class Bono {
+
+        - puntajeDeBono : int
+        + aumentarPuntajeDeJugador()
+    }
+
+    abstract class PowerUp {
+
+    }
+
+    class MasBombas
+
+}
+
+package "backEnd"{
+    class InterfazVisual
+    class JFrame
+    class VentanaDelJuego
+
+
+}
+
+BombermanJuego           --> "5"    Nivel: niveles
+BombermanJuego          -r->        EstadoDelJuego
+Entidad                 .u.|>       Colisionable
+Nivel                     --> "+"   Entidad
+Personaje               -r-|>       Entidad
+Bomba                   -u-|>       Entidad
+Bomba                    -d->       Llamas
+Bomba                   ..|>        Detenible
+Blaster                   ..|>        Detenible
+Llamas                  -l-|>       Entidad
+Llamas                   ..|>       Dañino
+PowerUp                 -u-|>       Entidad
+PowerUp                  ..|>       Recolectable
+MasBombas               -u-|>       PowerUp
+Bono                    -u-|>       Entidad
+Bono                     ..|>       Recolectable
+Personaje               .u.|>       Moviente
+Jugador                 -r-|>       Personaje
+Jugador                 .U.|>       KeyListener
+Balloon                 -u-|>       Personaje
+Balloon                  ..|>       Dañino
+Blaster                 -u-|>       Personaje
+Blaster                  ..|>       Amigable
+
+VentanaDelJuego --|> JPanel
+InterfazVisual --> VentanaDelJuego
+InterfazVisual --> JFrame
+@enduml
