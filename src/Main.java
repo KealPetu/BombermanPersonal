@@ -8,8 +8,8 @@ public class Main {
         Nivel nivel1 = bomberman.construirNivel (
                 "Nivel de prueba",
                 0,
-                new Balloon(10, 10),
-                new Bono(20, 20)
+                new Balloon (10, 10),
+                new Bono (20, 20)
         );
 
         bomberman.iniciarJuego();

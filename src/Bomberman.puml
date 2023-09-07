@@ -1,7 +1,7 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-package "frontEnd" {
+package "backEnd" {
     class BombermanJuego{
 
         + comprobarEstadoDelJuego()
@@ -104,8 +104,6 @@ package "frontEnd" {
         - esDetenible : boolean
     }
 
-    interface KeyListener
-
 
     class Balloon
     class Blaster
@@ -136,23 +134,36 @@ package "frontEnd" {
 
 }
 
-package "backEnd"{
-    class InterfazVisual
-    class JFrame
+package "frontEnd"{
+
     class VentanaDelJuego
-
-
+    abstract class PanelDelJuego
+    class PanelBanner
+    class PanelGamePlay
+    class PanelMenu
+    class PanelGameOver
+    class PanelSelecciónDeNivel
+    class PanelPausa
+    class PanelNivelSuperado
 }
 
-BombermanJuego           --> "5"    Nivel: niveles
-BombermanJuego          -r->        EstadoDelJuego
+"frontEnd"..>"backEnd"
+
+interface Runnable
+interface KeyListener
+interface MouseListener
+
+BombermanJuego            --> "5"   Nivel: niveles
+BombermanJuego           -r->       EstadoDelJuego
+BombermanJuego           .u.|>      Runnable
+BombermanJuego            -u->      Thread
 Entidad                 .u.|>       Colisionable
 Nivel                     --> "+"   Entidad
 Personaje               -r-|>       Entidad
 Bomba                   -u-|>       Entidad
 Bomba                    -d->       Llamas
-Bomba                   ..|>        Detenible
-Blaster                   ..|>        Detenible
+Bomba                    ..|>       Detenible
+Blaster                  ..|>       Detenible
 Llamas                  -l-|>       Entidad
 Llamas                   ..|>       Dañino
 PowerUp                 -u-|>       Entidad
@@ -162,13 +173,21 @@ Bono                    -u-|>       Entidad
 Bono                     ..|>       Recolectable
 Personaje               .u.|>       Moviente
 Jugador                 -r-|>       Personaje
-Jugador                 .U.|>       KeyListener
 Balloon                 -u-|>       Personaje
 Balloon                  ..|>       Dañino
 Blaster                 -u-|>       Personaje
 Blaster                  ..|>       Amigable
 
-VentanaDelJuego --|> JPanel
-InterfazVisual --> VentanaDelJuego
-InterfazVisual --> JFrame
+
+VentanaDelJuego --> "+" PanelDelJuego
+PanelDelJuego ..|> KeyListener
+PanelDelJuego ..|> MouseListener
+PanelDelJuego -r-> Graphics2D
+PanelBanner-u-|>PanelDelJuego
+PanelGamePlay-u-|>PanelDelJuego
+PanelPausa-u-|>PanelDelJuego
+PanelMenu-u-|>PanelDelJuego
+PanelNivelSuperado-u-|>PanelDelJuego
+PanelGameOver -u-|>PanelDelJuego
+PanelSelecciónDeNivel-u-|>PanelDelJuego
 @enduml
